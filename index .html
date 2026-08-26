@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lembaran Kerja: Buah-buahan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Chonburi&family=Noto+Sans+Thai:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#7a2e5c;
+    --plum-dark:#5c1f45;
+    --cream:#f6f0e2;
+    --mango:#e08a1e;
+    --mango-dark:#b46a12;
+    --leaf:#3f7a5d;
+    --leaf-dark:#2c5a43;
+    --water:#c8452f;
+    --charcoal:#2b2320;
+    --paper:#fffaf0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(224,138,30,0.14), transparent 45%),
+      radial-gradient(circle at 88% 88%, rgba(63,122,93,0.18), transparent 50%),
+      var(--plum-dark);
+    font-family:'Public Sans','Noto Sans Thai',sans-serif;
+    color:var(--charcoal);
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:28px 14px 60px;
+  }
+  .board{ width:100%; max-width:640px; }
+  .signboard{
+    background:linear-gradient(180deg,var(--mango) 0%, var(--mango-dark) 100%);
+    border-radius:18px 18px 6px 6px;
+    padding:22px 24px 18px;
+    text-align:center;
+    box-shadow:0 10px 0 rgba(0,0,0,0.18), 0 18px 30px rgba(0,0,0,0.35);
+    position:relative;
+    margin-bottom:26px;
+  }
+  .signboard::before, .signboard::after{
+    content:"";
+    position:absolute;
+    top:-16px;
+    width:6px;
+    height:22px;
+    background:#8c8c8c;
+    border-radius:2px;
+  }
+  .signboard::before{ left:26%; transform:rotate(-8deg); }
+  .signboard::after{ right:26%; transform:rotate(8deg); }
+  .eyebrow{
+    font-family:'Public Sans',sans-serif;
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#fff1d9;
+    opacity:.9;
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:'Chonburi','Fraunces',serif;
+    font-size:30px;
+    line-height:1.15;
+    margin:0 0 6px;
+    color:var(--paper);
+    text-shadow:0 2px 0 rgba(0,0,0,0.15);
+  }
+  .thai-sub{
+    font-family:'Noto Sans Thai',sans-serif;
+    font-size:15px;
+    color:#fff1d9;
+    margin:0;
+  }
+  .card{
+    background:var(--paper);
+    border-radius:16px;
+    padding:26px 24px 22px;
+    box-shadow:0 14px 34px rgba(0,0,0,0.30);
+    border:1px solid rgba(0,0,0,0.05);
+    min-height:340px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:6px;
+    background:repeating-linear-gradient(90deg, var(--plum) 0 18px, var(--leaf) 18px 36px);
+  }
+  .part-tag{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--leaf-dark);
+    background:rgba(63,122,93,0.12);
+    padding:5px 12px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  h2{
+    font-family:'Fraunces',serif;
+    font-size:22px;
+    margin:0 0 4px;
+    color:var(--plum-dark);
+  }
+  .th{
+    font-family:'Noto Sans Thai',sans-serif;
+    font-size:14px;
+    color:#6b6258;
+    margin:0 0 18px;
+  }
+  .item{
+    background:#fbf6e8;
+    border:1px solid #eadfc4;
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:12px;
+  }
+  .item.correct{ border-color:var(--leaf); background:#eef7ef; }
+  .item.wrong{ border-color:var(--water); background:#fbecea; }
+  .item-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .malay-word{
+    font-weight:700;
+    font-size:17px;
+    color:var(--plum-dark);
+    min-width:120px;
+  }
+  select, input[type="text"]{
+    font-family:'Noto Sans Thai','Public Sans',sans-serif;
+    font-size:15px;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1.5px solid #d8cba4;
+    background:#fff;
+    flex:1;
+    min-width:150px;
+  }
+  select:focus, input[type="text"]:focus{
+    outline:none;
+    border-color:var(--mango);
+    box-shadow:0 0 0 3px rgba(224,138,30,0.25);
+  }
+  .fb{
+    margin-top:8px;
+    font-size:13.5px;
+    font-weight:600;
+    display:none;
+  }
+  .fb.show{ display:block; }
+  .fb.ok{ color:var(--leaf-dark); }
+  .fb.no{ color:var(--water); }
+  .fillblank-sentence{
+    font-size:15.5px;
+    line-height:1.7;
+  }
+  .fillblank-sentence .th-hint{
+    display:block;
+    font-family:'Noto Sans Thai',sans-serif;
+    font-size:13px;
+    color:#8a8071;
+    margin-top:2px;
+  }
+  .wordbank{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:14px 0 20px;
+    padding:12px;
+    background:#f3ecd7;
+    border-radius:10px;
+    border:1px dashed #cbb98a;
+  }
+  .wordbank span{
+    background:var(--mango);
+    color:#3a2306;
+    font-weight:700;
+    font-size:13.5px;
+    padding:5px 12px;
+    border-radius:999px;
+  }
+  .example-box{
+    background:#f3ecf3;
+    border-left:4px solid var(--plum);
+    padding:10px 14px;
+    border-radius:8px;
+    font-size:14px;
+    margin-bottom:14px;
+  }
+  textarea{
+    width:100%;
+    font-family:'Public Sans',sans-serif;
+    font-size:15px;
+    padding:12px;
+    border-radius:10px;
+    border:1.5px solid #d8cba4;
+    min-height:52px;
+    resize:vertical;
+  }
+  textarea:focus{ outline:none; border-color:var(--mango); box-shadow:0 0 0 3px rgba(224,138,30,0.25); }
+  .btn-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:22px;
+  }
+  button{
+    font-family:'Public Sans',sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    border:none;
+    border-radius:10px;
+    padding:11px 20px;
+    cursor:pointer;
+    transition:transform .08s ease;
+  }
+  button:active{ transform:scale(0.96); }
+  .btn-primary{
+    background:var(--leaf);
+    color:#fff;
+    box-shadow:0 4px 0 var(--leaf-dark);
+  }
+  .btn-primary:hover{ background:var(--leaf-dark); }
+  .btn-ghost{
+    background:transparent;
+    color:var(--plum-dark);
+    border:1.5px solid #cfc6ac;
+  }
+  .btn-ghost:disabled{ opacity:.35; cursor:not-allowed; }
+  .btn-check{
+    background:var(--mango);
+    color:#3a2306;
+    box-shadow:0 4px 0 var(--mango-dark);
+    margin-top:6px;
+  }
+  .dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:18px 0 4px;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:rgba(255,255,255,0.28);
+  }
+  .dot.active{ background:var(--mango); }
+  .dot.done{ background:var(--leaf); }
+  .welcome-icons{
+    text-align:center;
+    font-size:42px;
+    letter-spacing:14px;
+    margin:6px 0 18px;
+  }
+  .name-field{ margin-bottom:14px; }
+  .name-field label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:#6b6258;
+    margin-bottom:5px;
+  }
+  .score-hero{ text-align:center; padding:10px 0 6px; }
+  .score-num{
+    font-family:'Fraunces',serif;
+    font-size:56px;
+    color:var(--water);
+    line-height:1;
+  }
+  .score-label{
+    font-size:13px;
+    color:#8a8071;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .praise{
+    text-align:center;
+    font-size:15.5px;
+    margin:14px 0 6px;
+    color:var(--plum-dark);
+    font-weight:600;
+  }
+  .review-list{ margin-top:18px; font-size:13.5px; }
+  .review-list div{
+    padding:6px 0;
+    border-bottom:1px dashed #e5dcc0;
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .badge-ok{ color:var(--leaf-dark); font-weight:700; }
+  .badge-no{ color:var(--water); font-weight:700; }
+  .hidden{ display:none !important; }
+  @media (max-width:420px){
+    h1{ font-size:24px; }
+    .malay-word{ min-width:100px; }
+    .score-num{ font-size:44px; }
+  }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="signboard">
+    <p class="eyebrow">Lembaran Kerja &middot; Bahasa Melayu</p>
+    <h1>Buah-buahan</h1>
+    <p class="thai-sub">ใบงาน: คำศัพท์เกี่ยวกับผลไม้</p>
+  </div>
+
+  <div class="card">
+
+    <!-- PAGE 0: WELCOME -->
+    <div class="page" id="page-0">
+      <span class="part-tag">Mula &middot; เริ่มต้น</span>
+      <div class="welcome-icons">🍌🍎🌰🍈🍉</div>
+      <h2>Selamat datang!</h2>
+      <p class="th">ยินดีต้อนรับสู่ใบงานคำศัพท์ภาษามลายูเรื่องผลไม้ มี 3 ส่วน พร้อมเฉลยทันทีทุกข้อ</p>
+      <div class="name-field">
+        <label>Nama (ชื่อ-นามสกุล)</label>
+        <input type="text" id="stuName" placeholder="เช่น สมชาย ใจดี">
+      </div>
+      <div class="name-field">
+        <label>Kelas (ชั้น)</label>
+        <input type="text" id="stuClass" placeholder="เช่น ม.2/1">
+      </div>
+      <div class="example-box">
+        มี 3 ส่วน: (1) จับคู่คำศัพท์ (2) เติมคำในช่องว่าง (3) ฝึกแต่งประโยค — ตอบแล้วกด "ตรวจคำตอบ" เพื่อดูเฉลยทันที
+      </div>
+    </div>
+
+    <!-- PAGE 1: MATCHING -->
+    <div class="page hidden" id="page-1">
+      <span class="part-tag">Bahagian 1 &middot; ส่วนที่ 1</span>
+      <h2>Padankan Perkataan</h2>
+      <p class="th">จับคู่คำศัพท์ภาษามลายูกับคำแปลภาษาไทย — เลือกคำตอบจากเมนู</p>
+
+      <div class="item" data-answer="ข">
+        <div class="item-row">
+          <span class="malay-word">1. Pisang</span>
+          <select>
+            <option value="">-- เลือกคำแปล --</option>
+            <option value="ก">ก. ทุเรียน</option>
+            <option value="ข">ข. กล้วย</option>
+            <option value="ค">ค. มังคุด</option>
+            <option value="ง">ง. แอปเปิ้ล</option>
+            <option value="จ">จ. แตงโม</option>
+          </select>
+        </div>
+        <p class="fb"></p>
+      </div>
+
+      <div class="item" data-answer="ง">
+        <div class="item-row">
+          <span class="malay-word">2. Epal</span>
+          <select>
+            <option value="">-- เลือกคำแปล --</option>
+            <option value="ก">ก. ทุเรียน</option>
+            <option value="ข">ข. กล้วย</option>
+            <option value="ค">ค. มังคุด</option>
+            <option value="ง">ง. แอปเปิ้ล</option>
+            <option value="จ">จ. แตงโม</option>
+          </select>
+        </div>
+        <p class="fb"></p>
+      </div>
+
+      <div class="item" data-answer="ก">
+        <div class="item-row">
+          <span class="malay-word">3. Durian</span>
+          <select>
+            <option value="">-- เลือกคำแปล --</option>
+            <option value="ก">ก. ทุเรียน</option>
+            <option value="ข">ข. กล้วย</option>
+            <option value="ค">ค. มังคุด</option>
+            <option value="ง">ง. แอปเปิ้ล</option>
+            <option value="จ">จ. แตงโม</option>
+          </select>
+        </div>
+        <p class="fb"></p>
+      </div>
+
+      <div class="item" data-answer="ค">
+        <div class="item-row">
+          <span class="malay-word">4. Manggis</span>
+          <select>
+            <option value="">-- เลือกคำแปล --</option>
+            <option value="ก">ก. ทุเรียน</option>
+            <option value="ข">ข. กล้วย</option>
+            <option value="ค">ค. มังคุด</option>
+            <option value="ง">ง. แอปเปิ้ล</option>
+            <option value="จ">จ. แตงโม</option>
+          </select>
+        </div>
+        <p class="fb"></p>
+      </div>
+
+      <div class="item" data-answer="จ">
+        <div class="item-row">
+          <span class="malay-word">5. Tembikai</span>
+          <select>
+            <option value="">-- เลือกคำแปล --</option>
+            <option value="ก">ก. ทุเรียน</option>
+            <option value="ข">ข. กล้วย</option>
+            <option value="ค">ค. มังคุด</option>
+            <option value="ง">ง. แอปเปิ้ล</option>
+            <option value="จ">จ. แตงโม</option>
+          </select>
+        </div>
+        <p class="fb"></p>
+      </div>
+
+      <button class="btn-check" onclick="checkPart1()">✔ ตรวจคำตอบ ส่วนที่ 1</button>
+    </div>
+
+    <!-- PAGE 2: FILL IN THE BLANK -->
+    <div class="page hidden" id="page-2">
+      <span class="part-tag">Bahagian 2 &middot; ส่วนที่ 2</span>
+      <h2>Isi Tempat Kosong</h2>
+      <p class="th">เลือกคำศัพท์ที่กำหนดให้เติมลงในประโยคให้สมบูรณ์</p>
+      <div class="wordbank">
+        <span>manis</span><span>kuning</span><span>merah</span><span>durian</span><span>buah</span>
+      </div>
+
+      <div class="item" data-answer="buah">
+        <div class="fillblank-sentence">1. Saya suka makan <input type="text" style="width:110px;">
+          <span class="th-hint">ฉันชอบกินผลไม้</span>
+        </div>
+        <p class="fb"></p>
+      </div>
+      <div class="item" data-answer="kuning">
+        <div class="fillblank-sentence">2. Buah pisang berwarna <input type="text" style="width:110px;">
+          <span class="th-hint">กล้วยมีสีเหลือง</span>
+        </div>
+        <p class="fb"></p>
+      </div>
+      <div class="item" data-answer="merah">
+        <div class="fillblank-sentence">3. Buah tembikai berwarna <input type="text" style="width:110px;"> di dalam.
+          <span class="th-hint">แตงโมมีสีแดงด้านใน</span>
+        </div>
+        <p class="fb"></p>
+      </div>
+      <div class="item" data-answer="manis">
+        <div class="fillblank-sentence">4. Buah epal ini sangat <input type="text" style="width:110px;">
+          <span class="th-hint">แอปเปิ้ลลูกนี้หวานมาก</span>
+        </div>
+        <p class="fb"></p>
+      </div>
+      <div class="item" data-answer="durian">
+        <div class="fillblank-sentence">5. <input type="text" style="width:110px;"> ialah raja buah.
+          <span class="th-hint">ทุเรียนคือราชาแห่งผลไม้</span>
+        </div>
+        <p class="fb"></p>
+      </div>
+
+      <button class="btn-check" onclick="checkPart2()">✔ ตรวจคำตอบ ส่วนที่ 2</button>
+    </div>
+
+    <!-- PAGE 3: SENTENCE BUILDING -->
+    <div class="page hidden" id="page-3">
+      <span class="part-tag">Bahagian 3 &middot; ส่วนที่ 3</span>
+      <h2>Bina Ayat</h2>
+      <p class="th">แต่งประโยคภาษามลายูโดยใช้รูปแบบ "Saya suka makan _______." (ฉันชอบกิน........) — ระบบจะช่วยตรวจรูปแบบเบื้องต้น</p>
+
+      <div class="example-box">ตัวอย่าง: <strong>Saya suka makan epal.</strong> (ฉันชอบกินแอปเปิ้ล)</div>
+
+      <div class="item" id="s1-item">
+        <label style="font-size:13px;font-weight:600;color:#6b6258;">2. Saya suka makan _______.</label>
+        <textarea id="s1" placeholder="Saya suka makan ..."></textarea>
+        <p class="fb"></p>
+      </div>
+
+      <div class="item" id="s2-item">
+        <label style="font-size:13px;font-weight:600;color:#6b6258;">3. Saya suka makan _______.</label>
+        <textarea id="s2" placeholder="Saya suka makan ..."></textarea>
+        <p class="fb"></p>
+      </div>
+
+      <button class="btn-check" onclick="checkPart3()">✔ ตรวจประโยค ส่วนที่ 3</button>
+    </div>
+
+    <!-- PAGE 4: RESULTS -->
+    <div class="page hidden" id="page-4">
+      <span class="part-tag">Selesai &middot; สรุปผล</span>
+      <div class="score-hero">
+        <div class="score-num" id="finalScore">0/10</div>
+        <div class="score-label">คะแนนรวม ส่วนที่ 1 &amp; 2</div>
+      </div>
+      <p class="praise" id="praiseMsg"></p>
+      <div class="review-list" id="reviewList"></div>
+    </div>
+
+    <div class="dots" id="dots">
+      <div class="dot active" data-i="0"></div>
+      <div class="dot" data-i="1"></div>
+      <div class="dot" data-i="2"></div>
+      <div class="dot" data-i="3"></div>
+      <div class="dot" data-i="4"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-ghost" id="backBtn" onclick="go(-1)" disabled>&larr; กลับ</button>
+      <button class="btn-primary" id="nextBtn" onclick="go(1)">ถัดไป &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let current = 0;
+const totalPages = 5;
+let p1Score = 0, p2Score = 0, p1Checked = false, p2Checked = false;
+
+function updateDots(){
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i===current) d.classList.add('active');
+    else if(i<current) d.classList.add('done');
+  });
+}
+
+function showPage(i){
+  document.querySelectorAll('.page').forEach((pg,idx)=>{
+    pg.classList.toggle('hidden', idx!==i);
+  });
+  document.getElementById('backBtn').disabled = (i===0);
+  const nextBtn = document.getElementById('nextBtn');
+  if(i===totalPages-1){
+    nextBtn.textContent = '↻ เริ่มใหม่';
+    nextBtn.onclick = restart;
+  } else if(i===3){
+    nextBtn.textContent = 'ดูผลคะแนน →';
+    nextBtn.onclick = ()=>{ buildResults(); go(1); };
+  } else {
+    nextBtn.textContent = 'ถัดไป →';
+    nextBtn.onclick = ()=>go(1);
+  }
+  updateDots();
+}
+
+function go(dir){
+  const target = current + dir;
+  if(target<0 || target>=totalPages) return;
+  current = target;
+  showPage(current);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restart(){
+  document.querySelectorAll('select').forEach(s=>s.value='');
+  document.querySelectorAll('input[type="text"]').forEach(i=>i.value='');
+  document.querySelectorAll('textarea').forEach(t=>t.value='');
+  document.querySelectorAll('.item').forEach(it=>it.classList.remove('correct','wrong'));
+  document.querySelectorAll('.fb').forEach(f=>{f.classList.remove('show','ok','no'); f.textContent='';});
+  p1Score=0; p2Score=0; p1Checked=false; p2Checked=false;
+  current=0;
+  showPage(0);
+}
+
+function checkPart1(){
+  const items = document.querySelectorAll('#page-1 .item');
+  let score = 0;
+  items.forEach(item=>{
+    const answer = item.getAttribute('data-answer');
+    const select = item.querySelector('select');
+    const fb = item.querySelector('.fb');
+    const chosen = select.value;
+    item.classList.remove('correct','wrong');
+    fb.classList.remove('ok','no');
+    if(chosen === ''){
+      fb.textContent = 'กรุณาเลือกคำตอบ';
+      fb.classList.add('show','no');
+      item.classList.add('wrong');
+      return;
+    }
+    if(chosen === answer){
+      score++;
+      item.classList.add('correct');
+      fb.textContent = '✔ ถูกต้อง!';
+      fb.classList.add('show','ok');
+    } else {
+      item.classList.add('wrong');
+      fb.textContent = '✘ ยังไม่ถูก เฉลย: ' + answer;
+      fb.classList.add('show','no');
+    }
+  });
+  p1Score = score;
+  p1Checked = true;
+}
+
+function checkPart2(){
+  const items = document.querySelectorAll('#page-2 .item');
+  let score = 0;
+  items.forEach(item=>{
+    const answer = item.getAttribute('data-answer').toLowerCase();
+    const input = item.querySelector('input[type="text"]');
+    const fb = item.querySelector('.fb');
+    const val = input.value.trim().toLowerCase();
+    item.classList.remove('correct','wrong');
+    fb.classList.remove('ok','no');
+    if(val === ''){
+      fb.textContent = 'กรุณาเติมคำตอบ';
+      fb.classList.add('show','no');
+      item.classList.add('wrong');
+      return;
+    }
+    if(val === answer){
+      score++;
+      item.classList.add('correct');
+      fb.textContent = '✔ ถูกต้อง!';
+      fb.classList.add('show','ok');
+    } else {
+      item.classList.add('wrong');
+      fb.textContent = '✘ ยังไม่ถูก เฉลย: ' + item.getAttribute('data-answer');
+      fb.classList.add('show','no');
+    }
+  });
+  p2Score = score;
+  p2Checked = true;
+}
+
+function checkPart3(){
+  const pairs = [
+    {id:'s1', mustInclude:['saya','suka','makan'], item:'s1-item', sample:'Saya suka makan durian. (ฉันชอบกินทุเรียน)'},
+    {id:'s2', mustInclude:['saya','suka','makan'], item:'s2-item', sample:'Saya suka makan tembikai. (ฉันชอบกินแตงโม)'}
+  ];
+  pairs.forEach(p=>{
+    const val = document.getElementById(p.id).value.trim();
+    const lower = val.toLowerCase();
+    const itemEl = document.getElementById(p.item);
+    const fb = itemEl.querySelector('.fb');
+    itemEl.classList.remove('correct','wrong');
+    fb.classList.remove('ok','no');
+    const hasAll = p.mustInclude.every(w=>lower.includes(w));
+    if(val === ''){
+      fb.textContent = 'กรุณาแต่งประโยค';
+      fb.classList.add('show','no');
+      itemEl.classList.add('wrong');
+    } else if(hasAll){
+      itemEl.classList.add('correct');
+      fb.innerHTML = '✔ ใช้รูปแบบถูกต้อง! เช่น: <em>' + p.sample + '</em>';
+      fb.classList.add('show','ok');
+    } else {
+      itemEl.classList.add('wrong');
+      fb.innerHTML = 'ลองใหม่ ให้ขึ้นต้นด้วยรูปแบบที่กำหนด เช่น: <em>' + p.sample + '</em>';
+      fb.classList.add('show','no');
+    }
+  });
+}
+
+function buildResults(){
+  if(!p1Checked) checkPart1();
+  if(!p2Checked) checkPart2();
+  const total = p1Score + p2Score;
+  document.getElementById('finalScore').textContent = total + '/10';
+  let msg = '';
+  if(total===10) msg = '🎉 ยอดเยี่ยม! ตอบถูกทุกข้อ Bagus sekali!';
+  else if(total>=7) msg = '👍 เก่งมาก! ใกล้เต็มแล้ว';
+  else if(total>=4) msg = '💪 ทำได้ดี ลองทบทวนคำศัพท์อีกนิด';
+  else msg = '📖 ลองกลับไปทบทวนคำศัพท์แล้วทำใหม่นะ';
+  document.getElementById('praiseMsg').textContent = msg;
+
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = '';
+  const p1Words = ['Pisang','Epal','Durian','Manggis','Tembikai'];
+  const p1Answers = {'ก':'ทุเรียน','ข':'กล้วย','ค':'มังคุด','ง':'แอปเปิ้ล','จ':'แตงโม'};
+  document.querySelectorAll('#page-1 .item').forEach((item,idx)=>{
+    const answer = item.getAttribute('data-answer');
+    const chosen = item.querySelector('select').value;
+    const isOk = chosen === answer;
+    const row = document.createElement('div');
+    row.innerHTML = `<span>${p1Words[idx]}</span><span class="${isOk?'badge-ok':'badge-no'}">${isOk?'✔ ถูก':'✘ เฉลย: '+p1Answers[answer]}</span>`;
+    reviewList.appendChild(row);
+  });
+  document.querySelectorAll('#page-2 .item').forEach((item,idx)=>{
+    const answer = item.getAttribute('data-answer');
+    const val = item.querySelector('input[type="text"]').value.trim().toLowerCase();
+    const isOk = val === answer.toLowerCase();
+    const row = document.createElement('div');
+    row.innerHTML = `<span>ประโยคที่ ${idx+1}</span><span class="${isOk?'badge-ok':'badge-no'}">${isOk?'✔ ถูก':'✘ เฉลย: '+answer}</span>`;
+    reviewList.appendChild(row);
+  });
+}
+
+showPage(0);
+</script>
+</body>
+</html>
